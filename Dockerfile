@@ -2,18 +2,18 @@
 #
 # VERSION 1.0
 
-FROM centos
+FROM ubuntu:12.04
 MAINTAINER Ian Blenke <ian@blenke.com>
 
 ENV CB_VERSION 2.2.0
 ENV CB_RELEASE_URL http://packages.couchbase.com/releases
-ENV CB_PACKAGE couchbase-server-community_${CB_VERSION}_x86_64.rpm
+ENV CB_PACKAGE couchbase-server-community_${CB_VERSION}_x86_64.deb
 ENV CB_USERNAME Administrator
 ENV CB_PASSWORD couchbase
 
 # Install couchbase
-RUN yum install -y wget pkgconfig
-RUN rpm --install $CB_RELEASE_URL/$CB_VERSION/$CB_PACKAGE
+RUN apt-get update; apt-get -y install wget
+RUN FILE=`mktemp`; wget "$CB_RELEASE_URL/$CB_VERSION/$CB_PACKAGE" -qO $FILE && sudo dpkg -i $FILE; rm $FILE
 RUN ln -s /opt/couchbase/bin/couchbase-cli /usr/local/bin/
 
 # Put start script
