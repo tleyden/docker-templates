@@ -32,7 +32,7 @@ VOLUME /data
 VOLUME /index
 
 # See http://docs.couchbase.com/couchbase-manual-2.5/cb-install/#xdcr
-EXPOSE 8091 8092 11210 11211
+EXPOSE 4369 8091 8092 11210 11211
 
 USER root
 CMD couchbase-start
