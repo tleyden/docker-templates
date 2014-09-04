@@ -13,7 +13,7 @@ ENV CB_PASSWORD couchbase
 
 # Install couchbase
 ENV DEBIAN_FRONTEND noninteractive
-RUN apt-get update; apt-get -y install wget librtmp0 python-pip
+RUN apt-get update; apt-get -y install wget curl librtmp0 python-pip
 RUN FILE=`mktemp`; wget "$CB_RELEASE_URL/$CB_VERSION/$CB_PACKAGE" -qO $FILE && dpkg -i $FILE && rm $FILE
 RUN ln -s /opt/couchbase/bin/couchbase-cli /usr/local/bin/
 
