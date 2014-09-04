@@ -16,7 +16,7 @@ RUN apt-get update; apt-get -y install wget librtmp0
 RUN FILE=`mktemp`; wget "$CB_RELEASE_URL/$CB_VERSION/$CB_PACKAGE" -qO $FILE && dpkg -i $FILE; rm $FILE
 RUN ln -s /opt/couchbase/bin/couchbase-cli /usr/local/bin/
 
-# Install couchebase client libraries
+# Install couchbase client libraries
 #RUN wget -O/etc/apt/sources.list.d/couchbase.list http://packages.couchbase.com/ubuntu/couchbase-ubuntu1404.list
 #RUN wget -O- http://packages.couchbase.com/ubuntu/couchbase.key | sudo apt-key add -
 #RUN apt-get update
