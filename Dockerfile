@@ -27,6 +27,7 @@ RUN ln -s /opt/couchbase/bin/couchbase-cli /usr/local/bin/
 ADD sources/couchbase-start /usr/local/bin/
 
 RUN mkdir -p /data/ /index
+RUN chown couchbase:couchbase /data /index
 VOLUME /data
 VOLUME /index
 
