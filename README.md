@@ -84,6 +84,49 @@ The node `cb12` automatically joins the cluster #1 via `cb11` and the node `cb22
 * Setup the XDCR as described in the [Set Source and Destination Clusters](http://docs.couchbase.com/couchbase-manual-2.2/#set-source-and-destination-clusters) documentation page. You will have to provide at lease one IP of a node in the cluster #2, the IP returned by `./scripts/ipof cb21` is a good choice.
 * Note you can also do all this stuff using command line. See the documentation for the details.
 
+## Some docker orchestration magic:
+
+Here is an example maestro-ng configuration for a 3 node couchbase cluster:
+
+```
+name: shared
+ships:
+  first: { ip: 10.0.0.10, docker_port: 4243 }
+  second: { ip: 10.0.0.11, docker_port: 4243 }
+  third: { ip: 10.0.0.12, docker_port: 4243 }
+services:
+  couchbase:
+    image: ianblenke/couchbase:2.2.0
+    instances:
+      couchbase-1:
+        ship: first
+        ports:  { couchweb: 8091, couchapi: 8092, couchebp: 11210, memcache: 11211, epmd: 4369 }
+        lifecycle:
+          running: [{type: tcp, port: couchweb},{type: tcp, port: couchapi},{type: tcp, port: couchebp},{type: tcp, port: memcache},{type: tcp, port: epmd}]
+        env: {IP: first}
+        stop_timeout: 2
+        limits: {memory: 5G, cpu: 10}
+        command: couchbase-start
+      couchbase-2:
+        ship: second
+        ports:  { couchweb: 8091, couchapi: 8092, couchebp: 11210, memcache: 11211, epmd: 4369 }
+        lifecycle:
+          running: [{type: tcp, port: couchweb},{type: tcp, port: couchapi},{type: tcp, port: couchebp},{type: tcp, port: memcache},{type: tcp, port: epmd}]
+        env: {IP: second}
+        stop_timeout: 2
+        limits: {memory: 5G, cpu: 10}
+        command: couchbase-start first
+      couchbase-3:
+        ship: third
+        ports:  { couchweb: 8091, couchapi: 8092, couchebp: 11210, memcache: 11211, epmd: 4369 }
+        lifecycle:
+          running: [{type: tcp, port: couchweb},{type: tcp, port: couchapi},{type: tcp, port: couchebp},{type: tcp, port: memcache},{type: tcp, port: epmd}]
+        env: {IP: third}
+        stop_timeout: 2
+        limits: {memory: 5G, cpu: 10}
+        command: couchbase-start first
+```
+
 ## Some routing magic
 
 If you host Docker on a Virtual Machine (a Vagrant managed VM for instance), you can make docker containers reachable from your VM's host by routing request to the docker bridge:
