@@ -13,7 +13,7 @@ ENV CB_PASSWORD couchbase
 
 # Install couchbase
 RUN apt-get update; apt-get -y install wget
-RUN FILE=`mktemp`; wget "$CB_RELEASE_URL/$CB_VERSION/$CB_PACKAGE" -qO $FILE && sudo dpkg -i $FILE; rm $FILE
+RUN FILE=`mktemp`; wget "$CB_RELEASE_URL/$CB_VERSION/$CB_PACKAGE" -qO $FILE && dpkg -i $FILE; rm $FILE
 RUN ln -s /opt/couchbase/bin/couchbase-cli /usr/local/bin/
 
 # Put start script
