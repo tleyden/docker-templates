@@ -9,7 +9,8 @@ function untilsuccessful() {
 	done
 }
 
-IP=`hostname --ip-address`
+LOCAL_IP=`hostname --ip-address`
+IP=${IP:-$LOCAL_IP}
 SEED=$1
 
 # Start Couchbase in background
