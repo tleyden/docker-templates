@@ -12,6 +12,11 @@ function untilsuccessful() {
 LOCAL_IP=`hostname --ip-address`
 IP=${IP:-$LOCAL_IP}
 SEED=$1
+CB_USERNAME=${CB_USERNAME:-Administrator}
+CB_PASSWORD=${CB_PASSWORD:-Password}
+CB_RAMSIZE=${CB_RAMSIZE:-4096}
+CB_DEFAULT_BUCKET_NAME=${CB_DEFAULT_BUCKET_NAME:-default}
+CB_DEFAULT_BUCKET_RAMSIZE=${CB_DEFAULT_BUCKET_RAMSIZE:-128}
 
 # Start Couchbase in background
 su - couchbase -c "/opt/couchbase/bin/couchbase-server -- -noinput" &
@@ -33,14 +38,17 @@ if [ -n "$SEED" ]; then
         untilsuccessful couchbase-cli server-add -c $SEED \
                 --user=$CB_USERNAME --password=$CB_PASSWORD \
                 --server-add=$IP
+        untilsuccessful couchbase-cli rebalance -c $SEED \
+                --user=$CB_USERNAME --password=$CB_PASSWORD
 else
         echo "Make Couchbase ($IP) the first cluster node"
         untilsuccessful couchbase-cli cluster-init -c $IP \
                 --cluster-init-username=$CB_USERNAME \
-                --cluster-init-password=$CB_PASSWORD
+                --cluster-init-password=$CB_PASSWORD \
+                --cluster-init-ramsize=$CB_RAMSIZE
         untilsuccessful couchbase-cli bucket-create -c $IP \
                 -u $CB_USERNAME -p $CB_PASSWORD \
-                --bucket=default --bucket-ramsize=128
+                --bucket=$CB_DEFAULT_BUCKET_NAME --bucket-ramsize=$CB_DEFAULT_BUCKET_RAMSIZE
 fi
 
 # Wait indefinitely on Couchbase process
