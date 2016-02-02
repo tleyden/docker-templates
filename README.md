@@ -1,3 +1,5 @@
+Update -- there is now an [Official Couchbase Dockerhub Repo](https://hub.docker.com/r/couchbase/server/) that is being maintained by Couchbase
+
 # Couchbase Docker container
 
 This my a fork of [ncolomer/docker-templates](https://github.com/ncolomer/docker-templates) for a maestro-ng deployable version of couchbase
