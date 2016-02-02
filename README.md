@@ -1,3 +1,6 @@
+
+Update -- there is now an [Official Couchbase Dockerhub Repo](https://hub.docker.com/r/couchbase/server/) that is being maintained by Couchbase
+
 # docker-templates
 
 | Container | Docker index | Github repo |
